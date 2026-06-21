@@ -164,12 +164,21 @@ if dashboard_df.empty:
     st.warning("Tidak ada skor churn yang dapat dipakai dari file ini.")
     st.stop()
 
-high_risk_count = int((dashboard_df["Segmen Risiko"] == "Risiko Tinggi").sum())
-predicted_churn_mask = (
-    dashboard_df["Prediksi"].astype(str).str.contains("Churn", case=False, na=False)
-    & ~dashboard_df["Pridiksi"]
+high_risk_count = int(
+    (dashboard_df["Segmen Risiko"] == "Risiko Tinggi").sum()
+)
+
+prediksi_text = (
+    dashboard_df["Prediksi"]
+    .fillna("")
     .astype(str)
-    .str.contains("Non", case=False,na=False,)
+    .str.strip()
+    .str.lower()
+)
+
+predicted_churn_mask = (
+    prediksi_text.str.contains("churn", na=False)
+    & ~prediksi_text.str.contains("non", na=False)
 )
 
 predicted_churn_count = int(predicted_churn_mask.sum())
