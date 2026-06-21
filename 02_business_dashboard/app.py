@@ -166,16 +166,10 @@ if dashboard_df.empty:
 
 high_risk_count = int((dashboard_df["Segmen Risiko"] == "Risiko Tinggi").sum())
 predicted_churn_mask = (
-    dashboard_df["Prediksi"].astyper(str).str.contains(
-        "Churn",
-        case=False,
-        na=False
-    )
-    & ~dashboard_df["Peridiksi"].astype(str).str.contains(
-        "Non",
-        case=False,
-        na=False,
-    )
+    dashboard_df["Prediksi"].astyper(str).str.contains("Churn", case=False, na=False)
+    & ~dashboard_df["Peridiksi"]
+    .astype(str)
+    .str.contains("Non", case=False,na=False,)
 )
 
 predicted_churn_count = int(predicted_churn_mask.sum())
