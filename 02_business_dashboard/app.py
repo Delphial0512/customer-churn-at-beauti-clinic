@@ -165,10 +165,20 @@ if dashboard_df.empty:
     st.stop()
 
 high_risk_count = int((dashboard_df["Segmen Risiko"] == "Risiko Tinggi").sum())
-predicted_churn_count = int(
-    dashboard_df["Prediksi"].str.contains("Churn", case=False, na=False)
-    & ~dashboard_df["Prediksi"].str.contains("Non", case=False, na=False)
-).sum()
+predicted_churn_mask = (
+    dashboard_df["Prediksi"].str.astyper(str).str.contains(
+        "Churn",
+        case=False,
+        na=False
+    )
+    & ~dashboard_df["Peridiksi"].astype(str).str.contains(
+        "Non",
+        case=False,
+        na=False,
+    )
+)
+
+predicted_churn_count = int(predicted_churn_mask.sum())
 
 metric_a, metric_b, metric_c, metric_d = st.columns(4)
 metric_a.metric("Customer diproses", f"{len(dashboard_df):,}".replace(",", "."))
